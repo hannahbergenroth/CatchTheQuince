@@ -1,25 +1,16 @@
 import numpy as np
 from classes import State, Circle
 import pygame, sys, time, random
+from definitions import *
 from pygame.locals import *
 from random import randrange
 
 def main():
 
-    width = 500;
-    height = 600;
-
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-
     basketLeft = 200;
     basketTop = 550;
     basketwidth = 100;
     basketHeight = 30;
-
-    speed_x = 0;
      
     # initialize screen
 
@@ -33,9 +24,13 @@ def main():
     # fill background
     background = pygame.Surface(screen.get_size())
     background = background.convert()
-    background.fill(RED)
-
+    background.fill((WHITE))
     
+    #use image as object
+    #quince = pygame.image.load('quince.png')
+    #quince = pygame.transform.scale(quince, (50,40))
+    #quince_rect = quince.get_rect()
+
      
     #circle = pygame.draw.circle(background, GREEN , (150,150), 15, 0)
     #rectangle = pygame.Rect(basketLeft, basketTop, basketwidth, basketHeight)
@@ -48,6 +43,8 @@ def main():
     reward = 0
     font = pygame.font.Font(None, 30)
     rect1 = pygame.Rect(0, 30, 100, 100)
+    rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
+    #fruit = Circle(crclCentreX,crclCentreY)  # circle(Surface, color, pos(x, y), radius, wi
     
     #s = State(rect1,Circle(10,10))
 
@@ -81,7 +78,6 @@ def main():
                     move_it = not move_it
           
         if move_it:
-            print("hej")
             rect1.move_ip(0,move_direction * 5)
             if not screen.get_rect().contains(rect1):
                 move_direction = move_direction * -1
@@ -89,6 +85,7 @@ def main():
          
         
         pygame.draw.rect(screen, BLACK, rect1, 1)
+        #pygame.draw.rect(screen, (255,255,255, 255), quince_rect, 1)
         pygame.display.flip()
         
                     
@@ -108,14 +105,16 @@ def main():
             sys.exit()
                 
         crclCentreY += crclYStepFalling
+        
+        fruit = pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), 10)
+        # circle(Surface, color, pos(x, y), radius, width=0)
+        #fruit.move_ip(move_direction * 5, 0)
+        
+        #quince_rect.move_ip(0, move_direction * 5)
+        #screen.blit(quince, quince_rect)
+        
+        rect2 = pygame.draw.rect(screen, GREEN, (basketLeft,basketTop,basketwidth,basketHeight), 0)
                 
-                
-        pygame.draw.circle(screen, RED, (crclCentreX, crclCentreY),
-                               10)  # circle(Surface, color, pos(x, y), radius, width=0)
-            
-        if crclCentreY >= basketTop:
-            crclCentreY = 10
-            crclCentreX = (randrange(10))*55+25
             
         pygame.draw.rect(screen, GREEN, (basketLeft,basketTop,basketwidth,basketHeight))
             
@@ -123,6 +122,16 @@ def main():
         text1 = font.render('missed: ' + str(missed), True, (238, 58, 140))  # update the score on the screen
         screen.blit(text, (width - 120, 10))  # render score
         screen.blit(text1, (width - 280, 10))  # render missed
+        
+        if crclCentreY >= basketTop:
+            crclCentreY = 10
+            crclCentreX = (randrange(10))*55+25
+            if fruit.colliderect(rect2):
+                rect2.top=0
+                score += 1
+              #  fruit = pygame.draw.circle(screen, RED, (crclCentreX, crclCentreY), 10)  # circle(Surface, color, pos(x, y), radius, wi
+            elif screen.get_rect().contains(fruit):
+                missed += 1
             
         pygame.display.update()
         
