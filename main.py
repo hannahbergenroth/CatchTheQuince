@@ -33,7 +33,7 @@ def main():
     # fill background
     background = pygame.Surface(screen.get_size())
     background = background.convert()
-    background.fill(WHITE)
+    background.fill(RED)
 
     
      
