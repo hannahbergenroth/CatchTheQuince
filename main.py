@@ -14,7 +14,6 @@ def main():
      
     # initialize screen
 
-
     pygame.init()
     screen = pygame.display.set_mode((width, height), 0, 32)
     pygame.display.set_caption('Catch the Quince')
