@@ -1,4 +1,3 @@
-import numpy as np
 from classes import State, Circle
 import pygame, sys, time, random
 from definitions import *
@@ -36,7 +35,7 @@ def main():
 
     crclCentreY = 10
     crclCentreX = 250
-    crclYStepFalling = 10
+    crclYStepFalling = 60
     score = 0
     missed = 0
     reward = 0
