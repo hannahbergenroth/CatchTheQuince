@@ -1,5 +1,7 @@
 import numpy as np
 
+epsilon = 0.5
+
 width = 500;
 height = 600;
 
@@ -11,7 +13,8 @@ BLACK = (0, 0, 0)
 
 basketStep = 50
 circleStep = 60
-CircleY = 10
+circleY = 10
+circleRadius = 10
 
 QDic = {}
 

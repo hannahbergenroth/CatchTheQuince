@@ -1,3 +1,4 @@
+from random import *
 import random
 import pygame as pygame
 from definitions import *
@@ -8,29 +9,49 @@ basketTop = 550;
 basketwidth = 100;
 basketHeight = 30;
 
-def new_state(state,action)
+def take_action(state,action):
     rect = None
-    
-    if action == 1 and basketLeft < width - basketwidth: #right
-        rect = pygame.Rect(state.left + basketStep, state.top, state.width, state.height)
-    elif action == 2 and basketLeft > 0: # left
-        rect = pygame.Rect(state.left - basketStep, state.top, state.width, state.height)
-    else
+    if action == 1 and state.rect.right < width: # right
+        rect = pygame.Rect(state.rect.left + basketStep, state.rect.top, state.rect.width, state.rect.height)
+    elif action == 2 and state.rect.left > 0: # left
+        rect = pygame.Rect(state.rect.left - basketStep, state.rect.top, state.rect.width, state.rect.height)
+    else:
         rect = state.rect
         
-    circle = s.Circle(state.circleX, state.circleY + circleStep)
-    
+    circle = Circle(state.circle.circleX, state.circle.circleY + circleStep)
     return State(rect, circle)
     
-def new_circleX
-    return circleX = randrange(10) * 55 + 25
+def get_rect(rect, action):
+    if action == 1 and rect.right < width: # right
+        return pygame.Rect(rect.left + basketStep, rect.top, basketwidth, basketHeight)
+    elif action == 2 and rect.left > 0: # left
+        return pygame.Rect(rect.left - basketStep, rect.top, basketwidth, basketHeight)
+    else:
+        return rect
     
-def find_state(state)
+def new_circleX():
+    return (randrange(10) * 55 + 25)
+    
+def calculate_score(rect, circle):
+    if circle.circleY >= rect.top:
+        if rect.left <= circle.circleX <= rect.right:
+            return 1
+        else:
+            return -100
+    else:
+        if rect.left <= circle.circleX <= rect.right:  # if the circle'x x position is between the rectangles left and right
+            return 1
+        else:
+            return -1
+        
+def calculate_score2(rect, circle):
+    return 1
+    
+def find_state(state):
     r = state.rect.left
     cX = state.circle.circleX
     cY = state.circle.circleY
     n = (int(str(r) + str(cX) + str(cY)))
-    
     # use a dictionary to access the index of the Qtable
     if n in QDic:
         return QDic[n]
@@ -42,7 +63,10 @@ def find_state(state)
             QDic[n] = 1
     return QDic[n]
     
-def get_best_action(state)
-    return np.argmax(QTable[find_state(state), :])
- 
-    
+def get_best_action(state):
+    if random.uniform(0, 1) < epsilon:
+        action = randrange(3)
+        print(action)
+    else:
+        action = np.argmax(QTable[find_state(state), :])
+    return action
