@@ -1,4 +1,4 @@
-from classes import State, Circle
+from classes import State
 import pygame, sys, time, random
 from definitions import *
 from functions import *
@@ -45,16 +45,19 @@ def main():
     background = background.convert()
     background.fill((WHITE))
     
+    #use image as object
     basket = pygame.image.load('basket.png')
     basket = pygame.transform.scale(basket,(100,70))
     rect2 = basket.get_rect()
     rect2.top = 525
-    #use image as object
+    
     quince = pygame.image.load('quince.png')
-    quince = pygame.transform.scale(quince, (50,40))
+    quince = pygame.transform.scale(quince, (40,40))
     quince_rect = quince.get_rect()
+    quince_rect.top = 10
+    quince_rect.left = width/2 - 20
 
-    crclCentreY = 10
+    crclCentreY = 20
     crclCentreX = 250
     
     Radius = 10
@@ -65,8 +68,6 @@ def main():
     reward = 0
     
     font = pygame.font.Font(None, 30)
-    
-    circle = pygame.Rect(0, 30, 100, 100)
     
     lr = .85
     dr = .99
@@ -88,30 +89,31 @@ def main():
                 print("snygging")
                 
    
-        s = State(rect2, Circle(crclCentreX, crclCentreY))
-         
-        pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
+        s = State(rect2, quince_rect)
+        
+        pygame.draw.rect(screen, (255,255,255),  quince_rect, 1)
+        #pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
         
         action = get_best_action(s, epsilon)
         s1 = take_action(s, action)
-        r0 = calculate_score(s1.rect, s1.circle)
+        r0 = calculate_score(s1.rect, s1.quince)
         
         QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
             
         rect2 = s1.rect
         pygame.draw.rect(screen, (255,255,255), rect2, 1)  # rect(Surface, color, Rect, width=0)
         
-        crclCentreY += 10
+        quince_rect.top += 10
         
         if r0 == -100:
             rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
-            crclCentreY = 10
-            crclCentreX = new_circleX()
+            quince_rect.top = 20
+            quince_rect.left = new_circleX()
             missed += 1
         elif r0 == 2:
             score += 1
-            crclCentreY = 10
-            crclCentreX = new_circleX()
+            quince_rect.top = 20
+            quince_rect.left = new_circleX()
          
         #pygame.draw.rect(screen, BLACK, rect1, 1)
         #pygame.draw.rect(screen, (255,0,0), basket_rect, 0)
@@ -131,7 +133,7 @@ def main():
         #fruit.move_ip(move_direction * 5, 0)
         
         
-     
+        screen.blit(quince, quince_rect)
         screen.blit(basket, rect2)
     
         text = font.render('score: ' + str(score), True, (238, 58, 140))  # update the score on the screen

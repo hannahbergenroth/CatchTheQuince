@@ -18,35 +18,29 @@ def take_action(state,action):
     else:
         rect = state.rect
     
-    return State(rect, state.circle)
-    
-def get_rect(rect, action):
-    if action == 1 and rect.right < width: # right
-        return pygame.Rect(rect.left + basketStep, rect.top, basketwidth, basketHeight)
-    elif action == 2 and rect.left > 0: # left
-        return pygame.Rect(rect.left - basketStep, rect.top, basketwidth, basketHeight)
-    else:
-        return rect
+    return State(rect, state.quince)
     
 def new_circleX():
-    return (randrange(9) * 55 + 30)
+    return (randrange(9) * 55 + 15)
     
-def calculate_score(rect, circle):
-    if circle.circleY + circleRadius >= rect.top:
-        if rect.left <= circle.circleX <= rect.right:
+def calculate_score(rect, quince):
+    if quince.top + 20 >= rect.top:
+        if rect.left <= quince.left and quince.right <= rect.right:
             return 2
         else:
+            print(rect.left)
+            print(quince.left)
             return -100
     else:
-        if rect.left <= circle.circleX <= rect.right:  # if the circle'x x position is between the rectangles left and right
+        if rect.left <= quince.left and quince.right <= rect.right:  # if the circle'x x position is between the rectangles left and right
             return 1
         else:
             return -1
     
 def find_state(state):
     r = state.rect.left
-    cX = state.circle.circleX
-    cY = state.circle.circleY
+    cX = state.quince.left
+    cY = state.quince.top
     n = (int(str(r) + str(cX) + str(cY)))
     # use a dictionary to access the index of the Qtable
     if n in QDic:
