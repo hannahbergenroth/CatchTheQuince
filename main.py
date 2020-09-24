@@ -30,12 +30,12 @@ def main():
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Catch the Quince')
     
-    #me´nu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
-    #menu.add_text_input('Name :', default='John Doe')
-    #menu.add_selector('Play :', [('You', 1), ('IT', 2)], onchange=change_player)
-    #menu.add_button('Play', start_the_game)
-    #menu.add_button('Quit', pygame_menu.events.EXIT)
-    #menu.mainloop(screen)
+    menu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
+    menu.add_text_input('Name :', default='John Doe')
+    menu.add_selector('Play :', [('You', 1), ('IT', 2)], onchange=change_player)
+    menu.add_button('Play', start_the_game)
+    menu.add_button('Quit', pygame_menu.events.EXIT)
+    menu.mainloop(screen)
 
     FPS = 20
     clock = pygame.time.Clock()
