@@ -44,6 +44,7 @@ def main():
     action = 0
     score = 0
     missed = 0
+    max_score = 0
     reward = 0
     
     font = pygame.font.Font(None, 30)
@@ -70,7 +71,7 @@ def main():
     #move_it = False
     #move_direction = 1
      
-    i = 0
+  
     # event loop
     while True:
         screen.fill(WHITE)
@@ -80,11 +81,12 @@ def main():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 (mouseX, mouseY) = pygame.mouse.get_pos()
+                print(epsilon)
+
                
                 #if(rect1.collidepoint((mouseX, mouseY))):
                     #move_it = not move_it
          
-        print(epsilon)
         s = State(rect2, Circle(crclCentreX, crclCentreY))
          
         pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
@@ -107,8 +109,11 @@ def main():
             crclCentreY = 10
             crclCentreX = new_circleX()
             missed += 1
+            score = 0
         elif r0 == 2:
             score += 1
+            if score >= max_score:
+                max_score = score
             crclCentreY = 10
             crclCentreX = new_circleX()
         
@@ -151,16 +156,14 @@ def main():
     
         text = font.render('score: ' + str(score), True, (238, 58, 140))  # update the score on the screen
         text1 = font.render('missed: ' + str(missed), True, (238, 58, 140))  # update the score on the screen
+        text2 = font.render('max: ' + str(max_score), True, (238, 58, 140))
         screen.blit(text, (width - 120, 10))  # render score
         screen.blit(text1, (width - 280, 10))  # render missed
-        
+        screen.blit(text2, (width - 440, 10))  # render max
             
         pygame.display.update()
         clock.tick(FPS)
-        if i == 10000:  # stopping condition
-            break
-        else:
-            i += 1
+        
         epsilon = set_epsilon(epsilon)
         
 if __name__ == '__main__':

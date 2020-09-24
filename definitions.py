@@ -1,7 +1,7 @@
 import numpy as np
 
 epsilon_min = 0.01
-epsilon_decay = 0.9995
+epsilon_decay = 0.99995
 
 width = 500
 height = 600
