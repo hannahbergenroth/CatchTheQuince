@@ -30,7 +30,7 @@ def main():
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Catch the Quince')
     
-    #menu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
+    #me´nu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
     #menu.add_text_input('Name :', default='John Doe')
     #menu.add_selector('Play :', [('You', 1), ('IT', 2)], onchange=change_player)
     #menu.add_button('Play', start_the_game)
@@ -65,6 +65,7 @@ def main():
     action = 0
     score = 0
     missed = 0
+    max_score = 0
     reward = 0
     
     font = pygame.font.Font(None, 30)
@@ -77,7 +78,7 @@ def main():
     screen.blit(background, (0, 0))
     #pygame.display.flip()
      
-    i = 0
+  
     # event loop
     while True:
         screen.fill(WHITE)
@@ -86,13 +87,17 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print("snygging")
-                
+                (mouseX, mouseY) = pygame.mouse.get_pos()
+                print(epsilon)
+
+               
+                #if(rect1.collidepoint((mouseX, mouseY))):
+                    #move_it = not move_it
+
    
         s = State(rect2, quince_rect)
         
         pygame.draw.rect(screen, (255,255,255),  quince_rect, 1)
-        #pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
         
         action = get_best_action(s, epsilon)
         s1 = take_action(s, action)
@@ -110,10 +115,15 @@ def main():
             quince_rect.top = 20
             quince_rect.left = new_circleX()
             missed += 1
+            score = 0
         elif r0 == 2:
             score += 1
             quince_rect.top = 20
             quince_rect.left = new_circleX()
+            if score >= max_score:
+                max_score = score
+
+
          
         #pygame.draw.rect(screen, BLACK, rect1, 1)
         #pygame.draw.rect(screen, (255,0,0), basket_rect, 0)
@@ -138,15 +148,14 @@ def main():
     
         text = font.render('score: ' + str(score), True, (238, 58, 140))  # update the score on the screen
         text1 = font.render('missed: ' + str(missed), True, (238, 58, 140))  # update the score on the screen
+        text2 = font.render('max: ' + str(max_score), True, (238, 58, 140))
         screen.blit(text, (width - 120, 10))  # render score
         screen.blit(text1, (width - 280, 10))  # render missed
-        
+        screen.blit(text2, (width - 440, 10))  # render max
+            
         pygame.display.update()
         clock.tick(FPS)
-        if i == 10000:  # stopping condition
-            break
-        else:
-            i += 1
+        
         epsilon = set_epsilon(epsilon)
         
 if __name__ == '__main__':
