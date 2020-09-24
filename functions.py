@@ -29,12 +29,10 @@ def get_rect(rect, action):
         return rect
     
 def new_circleX():
-    range = randrange(9) * 55 + 30
-    print(range)
-    return (range)
+    return (randrange(9) * 55 + 30)
     
 def calculate_score(rect, circle):
-    if circle.circleY >= rect.top:
+    if circle.circleY + circleRadius >= rect.top:
         if rect.left <= circle.circleX <= rect.right:
             return 2
         else:
@@ -44,9 +42,6 @@ def calculate_score(rect, circle):
             return 1
         else:
             return -1
-        
-def calculate_score2(rect, circle):
-    return 1
     
 def find_state(state):
     r = state.rect.left
@@ -72,7 +67,6 @@ def get_best_action(state, epsilon):
     #if epsilon > epsilon_min:
      #   epsilon *= epsilon_decay
     return action
-
 
 def set_epsilon(epsilon):
     if epsilon > epsilon_min:
