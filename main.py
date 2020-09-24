@@ -4,13 +4,23 @@ from definitions import *
 from functions import *
 from pygame.locals import *
 from random import *
+import pygame_menu
+
+def change_player(value, difficulty):
+    print(value)
+    print(difficulty)
+    pass
+    
+def start_the_game():
+    print("woooo")
+    pass
 
 def main():
 
     basketLeft = 200;
-    basketTop = 550;
+    basketTop = 525;
     basketwidth = 100;
-    basketHeight = 30;
+    basketHeight = 70;
     
     width = 500
     height = 600
@@ -19,6 +29,13 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Catch the Quince')
+    
+    #me´nu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
+    #menu.add_text_input('Name :', default='John Doe')
+    #menu.add_selector('Play :', [('You', 1), ('IT', 2)], onchange=change_player)
+    #menu.add_button('Play', start_the_game)
+    #menu.add_button('Quit', pygame_menu.events.EXIT)
+    #menu.mainloop(screen)
 
     FPS = 20
     clock = pygame.time.Clock()
@@ -28,13 +45,14 @@ def main():
     background = background.convert()
     background.fill((WHITE))
     
+    basket = pygame.image.load('basket.png')
+    basket = pygame.transform.scale(basket,(100,70))
+    rect2 = basket.get_rect()
+    rect2.top = 525
     #use image as object
-    #quince = pygame.image.load('quince.png')
-    #quince = pygame.transform.scale(quince, (50,40))
-    #quince_rect = quince.get_rect()
-
-    #circle = pygame.draw.circle(background, GREEN , (150,150), 15, 0)
-    #rectangle = pygame.Rect(basketLeft, basketTop, basketwidth, basketHeight)
+    quince = pygame.image.load('quince.png')
+    quince = pygame.transform.scale(quince, (50,40))
+    quince_rect = quince.get_rect()
 
     crclCentreY = 10
     crclCentreX = 250
@@ -50,26 +68,14 @@ def main():
     font = pygame.font.Font(None, 30)
     
     circle = pygame.Rect(0, 30, 100, 100)
-    rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
     
     lr = .85
     dr = .99
     epsilon = 1.0
-    
-
-    # display some text
-    #font = pygame.font.Font(None, 36)
-    #text = font.render("Hello from Monty PyGame", 1, (10, 10, 10))
-    #textpos = text.get_rect()
-    #textpos.centerx = background.get_rect().centerx
-    #background.blit(text, textpos)
      
     # blit everything to the screen
     screen.blit(background, (0, 0))
     #pygame.display.flip()
-
-    #move_it = False
-    #move_direction = 1
      
   
     # event loop
@@ -86,7 +92,7 @@ def main():
                
                 #if(rect1.collidepoint((mouseX, mouseY))):
                     #move_it = not move_it
-         
+                
         s = State(rect2, Circle(crclCentreX, crclCentreY))
          
         pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
@@ -97,13 +103,11 @@ def main():
         
         QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
             
-        
         rect2 = s1.rect
-        pygame.draw.rect(screen, RED, rect2)  # rect(Surface, color, Rect, width=0)
+        pygame.draw.rect(screen, (255,255,255), rect2, 1)  # rect(Surface, color, Rect, width=0)
         
         crclCentreY += 10
         
-       
         if r0 == -100:
             rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
             crclCentreY = 10
@@ -116,17 +120,9 @@ def main():
                 max_score = score
             crclCentreY = 10
             crclCentreX = new_circleX()
-        
-        
-            
-        #if move_it:
-            #rect1.move_ip(0,move_direction * 5)
-            #if not screen.get_rect().contains(rect1):
-                #move_direction = move_direction * -1
-                #rect1.move_ip(0, move_direction * 5)
          
         #pygame.draw.rect(screen, BLACK, rect1, 1)
-        #pygame.draw.rect(screen, (255,255,255, 255), quince_rect, 1)
+        #pygame.draw.rect(screen, (255,0,0), basket_rect, 0)
         #pygame.display.flip()
         
         #s = State(rectangle, Circle(crclCentreX, crclCentreY)
@@ -135,24 +131,15 @@ def main():
             
         #PLAY YOURSELF :)
         keys = pygame.key.get_pressed()
-        #if keys[pygame.K_LEFT] and basketLeft > 0:
-            #basketLeft -= 50
-            #print(basketLeft)
-        #if keys[pygame.K_RIGHT] and basketLeft < width-basketwidth:
-            #basketLeft += 50
-            #print(basketLeft)
         if keys[pygame.K_q] or keys[pygame.K_a]:
             pygame.quit()
             sys.exit()
-                
-                
-        
         
         # circle(Surface, color, pos(x, y), radius, width=0)
         #fruit.move_ip(move_direction * 5, 0)
         
-        #quince_rect.move_ip(0, move_direction * 5)
-        #screen.blit(quince, quince_rect)
+     
+        screen.blit(basket, rect2)
     
         text = font.render('score: ' + str(score), True, (238, 58, 140))  # update the score on the screen
         text1 = font.render('missed: ' + str(missed), True, (238, 58, 140))  # update the score on the screen
