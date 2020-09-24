@@ -17,9 +17,8 @@ def take_action(state,action):
         rect = pygame.Rect(state.rect.left - basketStep, state.rect.top, state.rect.width, state.rect.height)
     else:
         rect = state.rect
-        
-    circle = Circle(state.circle.circleX, state.circle.circleY + circleStep)
-    return State(rect, circle)
+    
+    return State(rect, state.circle)
     
 def get_rect(rect, action):
     if action == 1 and rect.right < width: # right
@@ -30,12 +29,14 @@ def get_rect(rect, action):
         return rect
     
 def new_circleX():
-    return (randrange(10) * 55 + 25)
+    range = randrange(9) * 55 + 30
+    print(range)
+    return (range)
     
 def calculate_score(rect, circle):
     if circle.circleY >= rect.top:
         if rect.left <= circle.circleX <= rect.right:
-            return 1
+            return 2
         else:
             return -100
     else:
@@ -63,10 +64,17 @@ def find_state(state):
             QDic[n] = 1
     return QDic[n]
     
-def get_best_action(state):
+def get_best_action(state, epsilon):
     if random.uniform(0, 1) < epsilon:
         action = randrange(3)
-        print(action)
     else:
         action = np.argmax(QTable[find_state(state), :])
+    #if epsilon > epsilon_min:
+     #   epsilon *= epsilon_decay
     return action
+
+
+def set_epsilon(epsilon):
+    if epsilon > epsilon_min:
+        epsilon = epsilon * epsilon_decay
+    return epsilon

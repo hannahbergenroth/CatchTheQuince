@@ -12,9 +12,12 @@ def main():
     basketwidth = 100;
     basketHeight = 30;
     
+    width = 500
+    height = 600
+    
     # initialize scree
     pygame.init()
-    screen = pygame.display.set_mode((width, height), 0, 32)
+    screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Catch the Quince')
 
     FPS = 20
@@ -35,7 +38,8 @@ def main():
 
     crclCentreY = 10
     crclCentreX = 250
-    crclYStepFalling = 60
+    
+    Radius = 10
     
     action = 0
     score = 0
@@ -44,17 +48,14 @@ def main():
     
     font = pygame.font.Font(None, 30)
     
-    #rect1 = pygame.Rect(0, 30, 100, 100)
+    circle = pygame.Rect(0, 30, 100, 100)
     rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
     
     lr = .85
     dr = .99
+    epsilon = 1.0
     
-    #fruit = Circle(crclCentreX,crclCentreY)  # circle(Surface, color, pos(x, y), radius, wi
-    
-    #s = State(rect1,Circle(10,10))
 
-     
     # display some text
     #font = pygame.font.Font(None, 36)
     #text = font.render("Hello from Monty PyGame", 1, (10, 10, 10))
@@ -64,7 +65,7 @@ def main():
      
     # blit everything to the screen
     screen.blit(background, (0, 0))
-    pygame.display.flip()
+    #pygame.display.flip()
 
     #move_it = False
     #move_direction = 1
@@ -79,37 +80,38 @@ def main():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 (mouseX, mouseY) = pygame.mouse.get_pos()
-                print(mouseX)
+               
                 #if(rect1.collidepoint((mouseX, mouseY))):
                     #move_it = not move_it
-                    
+         
+        print(epsilon)
         s = State(rect2, Circle(crclCentreX, crclCentreY))
+         
+        pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), Radius)
         
-        action = get_best_action(s)
-        r0 = calculate_score(s.rect, s.circle)
+        action = get_best_action(s, epsilon)
         s1 = take_action(s, action)
+        r0 = calculate_score(s1.rect, s1.circle)
         
         QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
             
-        crclCentreX = s1.circle.circleX
-        crclCentreY = s1.circle.circleY
-        fruit = pygame.draw.circle(screen, YELLOW, (crclCentreX, crclCentreY), circleRadius)
         
-        rect2 = get_rect(s.rect, action)
+        rect2 = s1.rect
         pygame.draw.rect(screen, RED, rect2)  # rect(Surface, color, Rect, width=0)
         
-        if crclCentreY >= basketTop: #under basket
-            if fruit.colliderect(rect2):
-                score += 1
-                crclCentreX = new_circleX()
-                crclCentreY = circleY
-            else: #game over
-                score = 0
-                rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
-                crclCentreX = new_circleX()
-                crclCentreY = circleY
-        else:
-            reward = 1
+        crclCentreY += 10
+        
+       
+        if r0 == -100:
+            rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
+            crclCentreY = 10
+            crclCentreX = new_circleX()
+            missed += 1
+        elif r0 == 2:
+            score += 1
+            crclCentreY = 10
+            crclCentreX = new_circleX()
+        
         
             
         #if move_it:
@@ -120,25 +122,26 @@ def main():
          
         #pygame.draw.rect(screen, BLACK, rect1, 1)
         #pygame.draw.rect(screen, (255,255,255, 255), quince_rect, 1)
-        pygame.display.flip()
+        #pygame.display.flip()
         
         #s = State(rectangle, Circle(crclCentreX, crclCentreY)
                 
         #print(crclCentreX)
             
         #PLAY YOURSELF :)
-        #keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()
         #if keys[pygame.K_LEFT] and basketLeft > 0:
             #basketLeft -= 50
             #print(basketLeft)
         #if keys[pygame.K_RIGHT] and basketLeft < width-basketwidth:
             #basketLeft += 50
             #print(basketLeft)
-        #if keys[pygame.K_q]:
-            #pygame.quit()
-            #sys.exit()
+        if keys[pygame.K_q] or keys[pygame.K_a]:
+            pygame.quit()
+            sys.exit()
                 
-        #crclCentreY += crclYStepFalling
+                
+        
         
         # circle(Surface, color, pos(x, y), radius, width=0)
         #fruit.move_ip(move_direction * 5, 0)
@@ -158,6 +161,7 @@ def main():
             break
         else:
             i += 1
+        epsilon = set_epsilon(epsilon)
         
 if __name__ == '__main__':
     main()
