@@ -4,11 +4,6 @@ import pygame as pygame
 from definitions import *
 from classes import *
 
-basketLeft = 200;
-basketTop = 550;
-basketwidth = 100;
-basketHeight = 30;
-
 def take_action(state,action):
     rect = None
     if action == 1 and state.rect.right < width: # right
@@ -17,7 +12,6 @@ def take_action(state,action):
         rect = pygame.Rect(state.rect.left - basketStep, state.rect.top, state.rect.width, state.rect.height)
     else:
         rect = state.rect
-    
     return State(rect, state.quince)
     
 def new_circleX():
@@ -32,18 +26,17 @@ def calculate_score(rect, quince):
             print(quince.left)
             return -100
     else:
-        if rect.left <= quince.left and quince.right <= rect.right:  # if the circle'x x position is between the rectangles left and right
+        if rect.left <= quince.left and quince.right <= rect.right:
             return 1
         else:
             return -1
     
 def find_state(state):
     r = state.rect.left
-    cX = state.quince.left
-    cY = state.quince.top
-    n = (int(str(r) + str(cX) + str(cY)))
-    # use a dictionary to access the index of the Qtable
-    if n in QDic:
+    X = state.quince.left
+    Y = state.quince.top
+    n = (int(str(r) + str(X) + str(Y)))
+    if n in QDic: # use a dictionary to access the index of the Qtable
         return QDic[n]
     else:
         if len(QDic):
@@ -58,8 +51,6 @@ def get_best_action(state, epsilon):
         action = randrange(3)
     else:
         action = np.argmax(QTable[find_state(state), :])
-    #if epsilon > epsilon_min:
-     #   epsilon *= epsilon_decay
     return action
 
 def set_epsilon(epsilon):
