@@ -1,9 +1,4 @@
-class Circle:
-    def __init__(self, circleX, circleY):
-        self.circleX = circleX
-        self.circleY = circleY
-
 class State:
-    def __init__(self, rect, circle):
+    def __init__(self, rect, quince):
         self.rect = rect
-        self.circle = circle
+        self.quince = quince
