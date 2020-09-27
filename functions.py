@@ -22,8 +22,8 @@ def calculate_score(rect, quince):
         if rect.left <= quince.left and quince.right <= rect.right:
             return 2
         else:
-            print(rect.left)
-            print(quince.left)
+            #print(rect.left)
+            #print(quince.left)
             return -100
     else:
         if rect.left <= quince.left and quince.right <= rect.right:
@@ -39,19 +39,37 @@ def find_state(state):
     if n in QDic: # use a dictionary to access the index of the Qtable
         return QDic[n]
     else:
+        print("add entry in QDic")
         if len(QDic):
             maximum = max(QDic, key=QDic.get)
             QDic[n] = QDic[maximum] + 1
         else:
+            print("EMPTY QDic")
             QDic[n] = 1
     return QDic[n]
+    
+def find_state2(state):
+    r = state.rect.left
+    X = state.quince.left
+    Y = state.quince.top
+    n = (int(str(r) + str(X) + str(Y)))
+    # use a dictionary to access the index of the Qtable
+    if n in QDic2: # use a dictionary to access the index of the Qtable
+        return QDic2[n]
+    else:
+        print("NO")
+        return 1
     
 def get_best_action(state, epsilon):
     if random.uniform(0, 1) < epsilon:
         action = randrange(3)
     else:
         action = np.argmax(QTable[find_state(state), :])
+        #print(action)
     return action
+    
+def get_best_action2(state):
+    return np.argmax(QTable2[find_state2(state), :])
 
 def set_epsilon(epsilon):
     if epsilon > epsilon_min:

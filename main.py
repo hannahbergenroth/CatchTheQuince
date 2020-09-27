@@ -5,19 +5,17 @@ from functions import *
 from pygame.locals import *
 from random import *
 import pygame_menu
+import h5py
+import ast
 
 def change_player(value, difficulty):
     playable = difficulty
     print(playable)
     return difficulty
 
-
 def game_loop(screen, height, width, player):
-    basketLeft = 200;
-    basketTop = 525;
-    basketwidth = 100;
-    basketHeight = 70;
-
+    
+    filename = 'QTable.h5'
     # initialize scree
     pygame.display.set_caption('Catch the Quince')
 
@@ -34,23 +32,18 @@ def game_loop(screen, height, width, player):
     basket = pygame.transform.scale(basket,(100,70))
     rect2 = basket.get_rect()
     rect2.top = 525
+    rect2.left = 200
   
     quince = pygame.image.load('quince.png')
     quince = pygame.transform.scale(quince, (40,40))
     quince_rect = quince.get_rect()
     quince_rect.top = 10
-    quince_rect.left = width/2 - 20
-
-    crclCentreY = 20
-    crclCentreX = 250
-  
-    Radius = 10
+    quince_rect.left = new_circleX()
   
     action = 0
     score = 0
     missed = 0
     max_score = 0
-    reward = 0
   
     font = pygame.font.Font(None, 30)
   
@@ -62,7 +55,6 @@ def game_loop(screen, height, width, player):
     screen.blit(background, (0, 0))
     #pygame.display.flip()
    
-
     # event loop
     while True:
         screen.fill(WHITE)
@@ -71,21 +63,34 @@ def game_loop(screen, height, width, player):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                (mouseX, mouseY) = pygame.mouse.get_pos()
                 print(epsilon)
-             
-                #if(rect1.collidepoint((mouseX, mouseY))):
-                    #move_it = not move_it
     
-        # CHANGE PLAYER - AI
-        if player == 1:
+        # CHANGE PLAYER - AI, 1 = Play, 2 = Learn
+        if player == 1 or player == 2:
+            if player == 1:
+                epsilon = 0
+            #with h5py.File(filename, 'r') as hf:
+            #  data = hf['this'][:]
+            #QTable = data
+            
+            #filen = open('dictionaryn.txt', 'r')
+            #contents = filen.read()
+            #dictionary = ast.literal_eval(contents)
+     
+            #QDic = ast.literal_eval(contents)
+            #filen.close()
+            
             s = State(rect2, quince_rect)
             pygame.draw.rect(screen, (255,255,255),  quince_rect, 1)
-            action = get_best_action(s, epsilon)
+            if player == 2:
+                action = get_best_action(s, epsilon)
+            else:
+                action = get_best_action2(s)
             s1 = take_action(s, action)
             r0 = calculate_score(s1.rect, s1.quince)
           
-            QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
+            if player == 2:
+                QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
               
             rect2 = s1.rect
             pygame.draw.rect(screen, (255,255,255), rect2, 1)  # rect(Surface, color, Rect, width=0)
@@ -104,22 +109,17 @@ def game_loop(screen, height, width, player):
                 quince_rect.left = new_circleX()
                 if score >= max_score:
                     max_score = score
-
-            #pygame.draw.rect(screen, BLACK, rect1, 1)
-            #pygame.draw.rect(screen, (255,0,0), basket_rect, 0)
-            #pygame.display.flip()
-          
-            #s = State(rectangle, Circle(crclCentreX, crclCentreY)
-                  
-            #print(crclCentreX)
           
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q] or keys[pygame.K_a]:
+            # UPDATE QTable and QDic
+            #with h5py.File('QTable.h5', 'w') as hf:
+            #   hf.create_dataset('this', data = QTable )
+            #f = open('dictionaryn.txt', 'w')
+            #f.write(str(QDic))
+            #f.close()
             pygame.quit()
             sys.exit()
-      
-        # circle(Surface, color, pos(x, y), radius, width=0)
-        #fruit.move_ip(move_direction * 5, 0)
         
         #PLAY YOURSELF :) CHANGE PLAYER
         if player == 0:
@@ -150,7 +150,6 @@ def game_loop(screen, height, width, player):
                     missed += 1
                     score = 0
       
-      
         screen.blit(quince, quince_rect)
         screen.blit(basket, rect2)
   
@@ -164,24 +163,25 @@ def game_loop(screen, height, width, player):
         pygame.display.update()
         clock.tick(FPS)
       
-        epsilon = set_epsilon(epsilon)
+        if player == 2:
+            epsilon = set_epsilon(epsilon)
 
 def main():
     pygame.init()
     width = 500
     height = 600
-    ai_play = 1
     you_play = 0
+    ai_play = 1
+    ai_learn = 2
     
     # initialize scree
     screen = pygame.display.set_mode((width, height))
     menu = pygame_menu.Menu(500, 500, 'Welcome', theme=pygame_menu.themes.THEME_DARK)
-    #menu.add_selector('Play :', [('You', 0), ('IT', 1)], onchange=change_player)
+    menu.add_button('Learn AI play', game_loop, screen, height, width, ai_learn)
     menu.add_button('Let AI play', game_loop, screen, height, width, ai_play)
     menu.add_button('Play yourself', game_loop, screen, height, width, you_play)
     menu.add_button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(screen)
-    
     
 if __name__ == '__main__':
     main()
