@@ -29,7 +29,7 @@ contents = file.read()
 QDic2 = ast.literal_eval(contents)
 QDic = {}
 
-QTable = np.zeros([5000,3]) #number of states (500/10) * (600/60) * (500/100)
+QTable = np.zeros([5000,3]) #number of states (500/10) * (600/60) * (500/100) # 50 * 9 * 9
 filename = 'QTable.h5'
 with h5py.File(filename, 'r') as hf:
     data = hf['this'][:]

@@ -113,11 +113,11 @@ def game_loop(screen, height, width, player):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q] or keys[pygame.K_a]:
             # UPDATE QTable and QDic
-            #with h5py.File('QTable.h5', 'w') as hf:
-            #   hf.create_dataset('this', data = QTable )
-            #f = open('dictionaryn.txt', 'w')
-            #f.write(str(QDic))
-            #f.close()
+            with h5py.File('QTable2.h5', 'w') as hf:
+               hf.create_dataset('this2', data = QTable )
+            f = open('dictionaryn2.txt', 'w')
+            f.write(str(QDic))
+            f.close()
             pygame.quit()
             sys.exit()
         
