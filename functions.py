@@ -40,16 +40,15 @@ def find_state(state):
     xled = q.left - r.left
     
     n = (int(str(xled) + str(yled)))
-    print(n)
     if n in QDic: # use a dictionary to access the index of the Qtable
         return QDic[n]
     else:
-        print("add entry in QDic")
+        #print("add entry in QDic")
         if len(QDic):
             maximum = max(QDic, key=QDic.get)
             QDic[n] = QDic[maximum] + 1
         else:
-            print("EMPTY QDic")
+            #print("EMPTY QDic")
             QDic[n] = 1
     return QDic[n]
     
@@ -80,3 +79,6 @@ def set_epsilon(epsilon):
     if epsilon > epsilon_min:
         epsilon = epsilon * epsilon_decay
     return epsilon
+    
+def randomVelocity():
+    return (randrange(2) + 1) * 10

@@ -21,6 +21,8 @@ def game_loop(screen, height, width, player):
 
     FPS = 20
     clock = pygame.time.Clock()
+
+
    
     # fill background
     background = pygame.Surface(screen.get_size())
@@ -46,6 +48,8 @@ def game_loop(screen, height, width, player):
     max_score = 0
   
     font = pygame.font.Font(None, 30)
+    
+    velocity = 10
   
     lr = .85
     dr = .99
@@ -95,15 +99,17 @@ def game_loop(screen, height, width, player):
             rect2 = s1.rect
             pygame.draw.rect(screen, (255,255,255), rect2, 1)  # rect(Surface, color, Rect, width=0)
         
-            quince_rect.top += 10
+            quince_rect.top += velocity
           
             if r0 == -100:
                 rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
                 quince_rect.top = 20
                 quince_rect.left = new_circleX()
+                velocity = randomVelocity()
                 missed += 1
                 score = 0
             elif r0 == 2:
+                velocity = randomVelocity()
                 score += 1
                 quince_rect.top = 20
                 quince_rect.left = new_circleX()
@@ -113,9 +119,9 @@ def game_loop(screen, height, width, player):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q] or keys[pygame.K_a]:
             # UPDATE QTable and QDic
-            with h5py.File('QTable2.h5', 'w') as hf:
-               hf.create_dataset('this2', data = QTable )
-            f = open('dictionaryn2.txt', 'w')
+            with h5py.File('QTableTHIS.h5', 'w') as hf:
+               hf.create_dataset('this', data = QTable )
+            f = open('dictionarynTHIS.txt', 'w')
             f.write(str(QDic))
             f.close()
             pygame.quit()
@@ -125,7 +131,7 @@ def game_loop(screen, height, width, player):
         if player == 0:
             pygame.draw.rect(screen, (255,255,255),  quince_rect, 1)
             pygame.draw.rect(screen, (255,255,255), rect2, 1)
-            quince_rect.top += 10
+            quince_rect.top += velocity
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT] and rect2.left > 0:
                 rect2.left -= 50
@@ -138,12 +144,14 @@ def game_loop(screen, height, width, player):
                 sys.exit()
             if quince_rect.top + 20 >= rect2.top:
                 if rect2.left <= quince_rect.left and quince_rect.right <= rect2.right:
+                    velocity = randomVelocity()
                     score += 1
                     quince_rect.top = 20
                     quince_rect.left = new_circleX()
                     if score >= max_score:
                         max_score = score
                 else:
+                    velocity = randomVelocity()
                     rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
                     quince_rect.top = 20
                     quince_rect.left = new_circleX()
