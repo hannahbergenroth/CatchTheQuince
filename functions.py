@@ -53,14 +53,18 @@ def find_state(state):
     return QDic[n]
     
 def find_state2(state):
-    r = state.rect.left
-    X = state.quince.left
-    Y = state.quince.top
-    n = (int(str(r) + str(X) + str(Y)))
+    r = state.rect
+    q = state.quince
+    
+    yled = r.top - q.top
+    xled = q.left - r.left
+    
+    n = (int(str(xled) + str(yled)))
     # use a dictionary to access the index of the Qtable
     if n in QDic2: # use a dictionary to access the index of the Qtable
         return QDic2[n]
     else:
+        print(n)
         print("NO")
         return 1
     

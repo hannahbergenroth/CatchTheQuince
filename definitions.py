@@ -24,13 +24,13 @@ circleStep = 30
 circleY = 10
 circleRadius = 10
 
-file = open('dictionaryn.txt', 'r')
+file = open('dictionarynTHIS.txt', 'r')
 contents = file.read()
 QDic2 = ast.literal_eval(contents)
 QDic = {}
 
 QTable = np.zeros([5000,3]) #number of states (500/10) * (600/60) * (500/100) # 50 * 9 * 9
-filename = 'QTable.h5'
+filename = 'QTableTHIS.h5'
 with h5py.File(filename, 'r') as hf:
     data = hf['this'][:]
 QTable2 = data

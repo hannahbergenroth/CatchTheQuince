@@ -39,7 +39,7 @@ def game_loop(screen, height, width, player):
     quince = pygame.image.load('quince.png')
     quince = pygame.transform.scale(quince, (40,40))
     quince_rect = quince.get_rect()
-    quince_rect.top = 10
+    quince_rect.top = 20
     quince_rect.left = new_circleX()
   
     action = 0
@@ -89,7 +89,7 @@ def game_loop(screen, height, width, player):
             #  data = hf['this'][:]
             #QTable = data
             
-            #filen = open('dictionaryn.txt', 'r')
+            #filen = open('dictionarynTHIS.txt', 'r')
             #contents = filen.read()
             #dictionary = ast.literal_eval(contents)
      
@@ -127,13 +127,14 @@ def game_loop(screen, height, width, player):
                 counter += 1
                 if score >= max_score:
                     max_score = score
+        
           
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q] or keys[pygame.K_a]:
             # UPDATE QTable and QDic
-            with h5py.File('QTableTHIS.h5', 'w') as hf:
+            with h5py.File('QTable.h5', 'w') as hf:
                hf.create_dataset('this', data = QTable )
-            f = open('dictionarynTHIS.txt', 'w')
+            f = open('dictionaryn.txt', 'w')
             f.write(str(QDic))
             f.close()
             pygame.quit()
