@@ -17,7 +17,7 @@ def take_action(state,action):
 def new_circleX():
     return (randrange(9) * 55 + 15)
     
-def calculate_score(rect, quince): 30 >= 525
+def calculate_score(rect, quince): #30 >= 525
     if quince.top + 20 >= rect.top:
         if rect.left <= quince.left and quince.right <= rect.right:
             return 2
@@ -36,19 +36,11 @@ def find_state(state):
     r = state.rect
     q = state.quince
     
-    yled = q.top - r.top
+    yled = r.top - q.top
     xled = q.left - r.left
     
-    if xled < 0:
-        xled = '0' + (str(abs(int(xled))))
-    else:
-        xled = (str(int(xled)))
-    yled = (str(int(yled)))
-    
-    n = (int(yled + xled))
-    
-    
-    #n = (int(str(r) + str(X) + str(Y)))
+    n = (int(str(xled) + str(yled)))
+    print(n)
     if n in QDic: # use a dictionary to access the index of the Qtable
         return QDic[n]
     else:
