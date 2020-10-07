@@ -82,3 +82,9 @@ def set_epsilon(epsilon):
     
 def randomVelocity():
     return (randrange(2) + 1) * 10
+    
+def switchVelocity(velocity):
+    if velocity == 10:
+        return 0
+    else:
+        return 1

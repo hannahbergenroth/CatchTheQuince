@@ -22,7 +22,7 @@ def game_loop(screen, height, width, player):
     FPS = 20
     clock = pygame.time.Clock()
 
-
+    counter = 0
    
     # fill background
     background = pygame.Surface(screen.get_size())
@@ -54,6 +54,10 @@ def game_loop(screen, height, width, player):
     lr = .85
     dr = .99
     epsilon = 1.0
+    
+    texten = 'faster'
+    
+    
    
     # blit everything to the screen
     screen.blit(background, (0, 0))
@@ -67,8 +71,16 @@ def game_loop(screen, height, width, player):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
                 print(epsilon)
-    
+                if width-100 <= mouse[0] <= width-40 and 50 <= mouse[1] <= 70:
+                    if(switchVelocity(velocity) == 0):
+                        velocity = 20
+                        texten = 'slower'
+                    else:
+                        velocity = 10
+                        texten = 'faster'
+                
         # CHANGE PLAYER - AI, 1 = Play, 2 = Learn
         if player == 1 or player == 2:
             if player == 1:
@@ -105,14 +117,14 @@ def game_loop(screen, height, width, player):
                 rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
                 quince_rect.top = 20
                 quince_rect.left = new_circleX()
-                velocity = randomVelocity()
                 missed += 1
                 score = 0
+                counter +=1
             elif r0 == 2:
-                velocity = randomVelocity()
                 score += 1
                 quince_rect.top = 20
                 quince_rect.left = new_circleX()
+                counter += 1
                 if score >= max_score:
                     max_score = score
           
@@ -143,6 +155,7 @@ def game_loop(screen, height, width, player):
                 pygame.quit()
                 sys.exit()
             if quince_rect.top + 20 >= rect2.top:
+                counter += 1
                 if rect2.left <= quince_rect.left and quince_rect.right <= rect2.right:
                     velocity = randomVelocity()
                     score += 1
@@ -161,12 +174,14 @@ def game_loop(screen, height, width, player):
         screen.blit(quince, quince_rect)
         screen.blit(basket, rect2)
   
-        text = font.render('score: ' + str(score), True, (238, 58, 140))  # update the score on the screen
-        text1 = font.render('missed: ' + str(missed), True, (238, 58, 140))  # update the score on the screen
-        text2 = font.render('max: ' + str(max_score), True, (238, 58, 140))
-        screen.blit(text, (width - 120, 10))  # render score
-        screen.blit(text1, (width - 280, 10))  # render missed
-        screen.blit(text2, (width - 440, 10))  # render max
+        text = font.render('Score: ' + str(score), True, (238, 58, 140))  # update the score on the screen
+        text1 = font.render('Episode: ' + str(counter), True, (238, 58, 140))  # update the score on the screen
+        text2 = font.render('Max: ' + str(max_score), True, (238, 58, 140))
+        button = font.render(texten, True , (0,0,0)) #button
+        screen.blit(text, (width - 120, 15))  # render score
+        screen.blit(text1, (width - 300, 15))  # render episodes
+        screen.blit(text2, (width - 450, 15))  # render max
+        screen.blit(button , (width - 100, 50))
           
         pygame.display.update()
         clock.tick(FPS)
