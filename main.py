@@ -56,6 +56,7 @@ def game_loop(screen, height, width, player):
     epsilon = 1.0
     
     texten = 'faster'
+    texten2 = 'X'
     
     
    
@@ -80,6 +81,8 @@ def game_loop(screen, height, width, player):
                     else:
                         velocity = 10
                         texten = 'faster'
+                if 10 <= mouse[0] <= 30 and 10 <= mouse[1] <= 30:
+                    return
                 
         # CHANGE PLAYER - AI, 1 = Play, 2 = Learn
         if player == 1 or player == 2:
@@ -158,14 +161,12 @@ def game_loop(screen, height, width, player):
             if quince_rect.top + 20 >= rect2.top:
                 counter += 1
                 if rect2.left <= quince_rect.left and quince_rect.right <= rect2.right:
-                    velocity = randomVelocity()
                     score += 1
                     quince_rect.top = 20
                     quince_rect.left = new_circleX()
                     if score >= max_score:
                         max_score = score
                 else:
-                    velocity = randomVelocity()
                     rect2 = pygame.Rect(basketLeft,basketTop,basketwidth,basketHeight)
                     quince_rect.top = 20
                     quince_rect.left = new_circleX()
@@ -179,10 +180,12 @@ def game_loop(screen, height, width, player):
         text1 = font.render('Episode: ' + str(counter), True, (238, 58, 140))  # update the score on the screen
         text2 = font.render('Max: ' + str(max_score), True, (238, 58, 140))
         button = font.render(texten, True , (0,0,0)) #button
+        button2 = font.render(texten2, True , (0,0,0)) #button
         screen.blit(text, (width - 120, 15))  # render score
         screen.blit(text1, (width - 300, 15))  # render episodes
         screen.blit(text2, (width - 450, 15))  # render max
         screen.blit(button , (width - 100, 50))
+        screen.blit(button2, (15,15))
           
         pygame.display.update()
         clock.tick(FPS)
