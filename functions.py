@@ -67,7 +67,18 @@ def find_state2(state):
         print(n)
         print("NO")
         return 1
-    
+
+def add_data(reward):
+    Data.append(reward)
+    #np.insert(Data, Data.size, reward)
+   # if len(Data):
+    #    maximum = max(Data, key=Data.get)
+    #    Data[len(Data) + 1] = reward
+    #    print(len(Data))
+   # else:
+    #    Data[1] = reward
+     #   print(len(Data))
+
 def get_best_action(state, epsilon):
     if random.uniform(0, 1) < epsilon:
         action = randrange(3)

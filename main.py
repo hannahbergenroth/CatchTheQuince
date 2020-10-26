@@ -57,6 +57,8 @@ def game_loop(screen, height, width, player):
     
     texten = 'faster'
     texten2 = 'X'
+
+    points = 0
     
     
    
@@ -107,6 +109,7 @@ def game_loop(screen, height, width, player):
                 action = get_best_action2(s)
             s1 = take_action(s, action)
             r0 = calculate_score(s1.rect, s1.quince)
+            points += r0
           
             if player == 2:
                 QTable[find_state(s), action] = QTable[find_state(s), action] + lr * (r0 + dr * np.max(QTable[find_state(s1), :]) - QTable[find_state(s), action])
@@ -123,11 +126,15 @@ def game_loop(screen, height, width, player):
                 missed += 1
                 score = 0
                 counter +=1
+                add_data(points)
+                points = 0
             elif r0 == 2:
                 score += 1
                 quince_rect.top = 20
                 quince_rect.left = new_circleX()
                 counter += 1
+                add_data(points)
+                points = 0
                 if score >= max_score:
                     max_score = score
         
@@ -140,6 +147,9 @@ def game_loop(screen, height, width, player):
             f = open('dictionaryn.txt', 'w')
             f.write(str(QDic))
             f.close()
+            g = open('data1.txt', 'w')
+            g.write(str(Data))
+            g.close()
             pygame.quit()
             sys.exit()
         

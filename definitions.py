@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import *
 import ast
 import h5py
 
@@ -28,6 +29,8 @@ file = open('dictionarynTHIS.txt', 'r')
 contents = file.read()
 QDic2 = ast.literal_eval(contents)
 QDic = {}
+#Data = array((1))
+Data = []
 
 QTable = np.zeros([5000,3]) #number of states (500/10) * (600/60) * (500/100) # 50 * 9 * 9
 filename = 'QTableTHIS.h5'
